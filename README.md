@@ -185,9 +185,7 @@ $\lambda = (S, O, A, B, \pi)$
 
 1. **Evaluation**: compute probability of an observation sequence  
 
-   $$
-   P(O \mid \lambda) = \sum_{S} \pi_{s_1} \, b_{s_1}(o_1) \prod_{t=2}^{T} a_{s_{t-1}, s_t} \, b_{s_t}(o_t)
-   $$  
+   $P(O \mid \lambda) = \sum_{S} \pi_{s_1} \, b_{s_1}(o_1) \prod_{t=2}^{T} a_{s_{t-1}, s_t} \, b_{s_t}(o_t)$
 
    (solved efficiently by the *forward algorithm*).
 
@@ -195,9 +193,7 @@ $\lambda = (S, O, A, B, \pi)$
 
 2. **Decoding**: find the most likely hidden state sequence  
 
-   $$
-   \hat{S} = \arg\max_{S} P(S \mid O, \lambda)
-   $$  
+   $\hat{S} = \arg\max_{S} P(S \mid O, \lambda)$  
 
    (solved by the *Viterbi algorithm*).
 
@@ -216,33 +212,23 @@ $\lambda = (S, O, A, B, \pi)$
 We map HMM components to the road/GPS problem:
 
 - **States (hidden)**: road segments  
-  $$
-  S = \{ r_1, r_2, \dots, r_{N_r} \}
-  $$
+  $S = \{ r_1, r_2, \dots, r_{N_r} \$
 
 - **Observations**: GPS points  
-  $$
-  O = (z_1, z_2, \dots, z_T), \quad z_t \in \mathbb{R}^2
-  $$
+  $O = (z_1, z_2, \dots, z_T), \quad z_t \in \mathbb{R}^2$
 
 - **Emission probabilities**: likelihood of GPS point given road  
-  $$
-  P(z_t \mid r_i) = \frac{1}{2\pi\sigma_z^2} \exp\!\left(-\frac{\| z_t - x_{t,i} \|^2}{2\sigma_z^2}\right)
-  $$
+  $ P(z_t \mid r_i) = \frac{1}{2\pi\sigma_z^2} \exp\!\left(-\frac{\| z_t - x_{t,i} \|^2}{2\sigma_z^2}\right)$
   where $x_{t,i}$ is the closest point on road $r_i$ to GPS point $z_t$.
 
 - **Transition probabilities**: likelihood of moving between road segments  
-  $$
-  P(r_j \mid r_i) \propto \exp\!\left(-\frac{\big| d_{\text{route}}(x_{t,i}, x_{t+1,j}) - d_{\text{gc}}(z_t, z_{t+1}) \big|}{\beta}\right)
-  $$
+  $ P(r_j \mid r_i) \propto \exp\!\left(-\frac{\big| d_{\text{route}}(x_{t,i}, x_{t+1,j}) - d_{\text{gc}}(z_t, z_{t+1}) \big|}{\beta}\right)$
   - $d_{\text{route}}(\cdot)$ = shortest-path distance along road network (topology).  
   - $d_{\text{gc}}(\cdot)$ = great-circle distance between GPS points.  
   - If roads $r_i$ and $r_j$ are not connected → $P(r_j \mid r_i) = 0$.
 
 - **Initial distribution**:  
-  $$
-  \pi_i = P(r_i \mid z_1) \propto P(z_1 \mid r_i)
-  $$
+  $\pi_i = P(r_i \mid z_1) \propto P(z_1 \mid r_i)$
 
 ---
 
