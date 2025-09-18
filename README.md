@@ -60,28 +60,17 @@ Tackles the challenge of map-matching with low-frequency and noisy GPS trajector
 
 **For Car & Low-Frequency**
 
-**Baseline**: HMM map-matching algorithm (Newson & Krumm, 2009).
+**Foundation Algorithm**: HMM map-matching algorithm (Newson & Krumm, 2009).
 
 
 **Enhancement**: Change the transition probability so it doesn’t only check for shortest paths, but also accounts for drivers’ real preferences
 
 Original transition probability:
-$$
-P(s_t \mid s_{t-1}) \propto 
-\exp \!\left( \theta_1 \cdot \text{Length} 
-+ \theta_2 \cdot \text{TravelTime} 
-+ \theta_3 \cdot \text{RoadClassPreference} 
-+ \theta_4 \cdot \text{ClassChangePenalty} \right)
-$$
+
+$P(s_t \mid s_{t-1}) \propto  \exp\!\left(-\frac{\lvert d_{\text{network}}(s_{t-1},s_t) - d_{\text{euclidean}}(o_{t-1},o_t) \rvert}{\beta}\right)$
 
 New Proposed:
-$$
-P(s_t \mid s_{t-1}) \propto 
-\exp \!\left( \theta_1 \cdot \text{Length} 
-+ \theta_2 \cdot \text{TravelTime} 
-+ \theta_3 \cdot \text{RoadClassPreference} 
-+ \theta_4 \cdot \text{ClassChangePenalty} \right)
-$$
+$P(s_t \mid s_{t-1}) \propto \exp \!\left( \theta_1 \cdot \text{Length} + \theta_2 \cdot \text{TravelTime} + \theta_3 \cdot \text{RoadClassPreference}  + \theta_4 \cdot \text{ClassChangePenalty} \right)$
 
 
 
@@ -116,7 +105,9 @@ Addresses the problem of errors in GPS cycling data, especially in dense urban a
 reduce accuracy. Existing map-matching methods, often designed for cars, perform poorly for bicycles due to device errors, ambiguous road
 networks, and inaccuracies in OpenStreetMap.
 
-**Baseline**: Classical GIS-based map-matching framework (Reenfeld, 2002 & Quddus et al. 2003 GIS-based framework. 
+**For Cycling & High-Frequency**
+
+**Foundation Algorithm**: Classical GIS-based map-matching framework (Reenfeld, 2002 & Quddus et al. 2003 GIS-based framework. 
 
 **Enhancement**: 
 
@@ -127,7 +118,7 @@ networks, and inaccuracies in OpenStreetMap.
 **Limitation:** 
 
 The method struggles with evaluating road availability at circular intersections, which can be misclassified as loops.
-![img.png](img.png)
+
 Ground truth data for bicycles is often unavailable, making it difficult to fully validate performance.
 
 The method is designed with Rotterdam as the case study, so infrastructure and usage patterns in other cities may require adaptation.
