@@ -10,6 +10,7 @@
 | **Features of data sets**             | Dense trajectory points, small change of heading angle and smooth curve | Trajectory points sparsity and large curve fluctuation                      |
 | **Advantage**                         | Dense points reduce computation by narrowing candidate segments. Small heading angle changes help detect junctions. Curve smoothing preserves trajectory integrity, lowering difficulty. | Probability/statistics methods perform better with sparse trajectories.     |
 
+***The trajectory points we have is ~1sec/point***
 
 ### b) Based on data information
 
