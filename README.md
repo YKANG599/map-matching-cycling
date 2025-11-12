@@ -10,6 +10,10 @@
 | **Features of data sets**             | Dense trajectory points, small change of heading angle and smooth curve | Trajectory points sparsity and large curve fluctuation                      |
 | **Advantage**                         | Dense points reduce computation by narrowing candidate segments. Small heading angle changes help detect junctions. Curve smoothing preserves trajectory integrity, lowering difficulty. | Probability/statistics methods perform better with sparse trajectories.     |
 
+<<<<<<< HEAD
+=======
+***The trajectory points we have are ~1sec/point***
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
 ### b) Based on data information
 
@@ -59,12 +63,17 @@ Tackles the challenge of map-matching with low-frequency and noisy GPS trajector
 
 **For Car & Low-Frequency**
 
+<<<<<<< HEAD
 **Baseline**: HMM map-matching algorithm (Newson & Krumm, 2009).
+=======
+**Foundation Algorithm**: HMM map-matching algorithm (Newson & Krumm, 2009).
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
 
 **Enhancement**: Change the transition probability so it doesn’t only check for shortest paths, but also accounts for drivers’ real preferences
 
 Original transition probability:
+<<<<<<< HEAD
 $$
 P(s_t \mid s_{t-1}) \propto 
 \exp \!\left( \theta_1 \cdot \text{Length} 
@@ -81,6 +90,13 @@ P(s_t \mid s_{t-1}) \propto
 + \theta_3 \cdot \text{RoadClassPreference} 
 + \theta_4 \cdot \text{ClassChangePenalty} \right)
 $$
+=======
+
+$P(s_t \mid s_{t-1}) \propto  \exp\!\left(-\frac{\lvert d_{\text{network}}(s_{t-1},s_t) - d_{\text{euclidean}}(o_{t-1},o_t) \rvert}{\beta}\right)$
+
+New Proposed:
+$P(s_t \mid s_{t-1}) \propto \exp \!\left( \theta_1 \cdot \text{Length} + \theta_2 \cdot \text{TravelTime} + \theta_3 \cdot \text{RoadClassPreference}  + \theta_4 \cdot \text{ClassChangePenalty} \right)$
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
 
 
@@ -115,7 +131,13 @@ Addresses the problem of errors in GPS cycling data, especially in dense urban a
 reduce accuracy. Existing map-matching methods, often designed for cars, perform poorly for bicycles due to device errors, ambiguous road
 networks, and inaccuracies in OpenStreetMap.
 
+<<<<<<< HEAD
 **Baseline**: Classical GIS-based map-matching framework (Reenfeld, 2002 & Quddus et al. 2003 GIS-based framework. 
+=======
+**For Cycling & High-Frequency**
+
+**Foundation Algorithm**: Classical GIS-based map-matching framework (Reenfeld, 2002 & Quddus et al. 2003 GIS-based framework. 
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
 **Enhancement**: 
 
@@ -126,7 +148,11 @@ networks, and inaccuracies in OpenStreetMap.
 **Limitation:** 
 
 The method struggles with evaluating road availability at circular intersections, which can be misclassified as loops.
+<<<<<<< HEAD
 ![img.png](img.png)
+=======
+
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 Ground truth data for bicycles is often unavailable, making it difficult to fully validate performance.
 
 The method is designed with Rotterdam as the case study, so infrastructure and usage patterns in other cities may require adaptation.
@@ -184,9 +210,13 @@ $\lambda = (S, O, A, B, \pi)$
 
 1. **Evaluation**: compute probability of an observation sequence  
 
+<<<<<<< HEAD
    $$
    P(O \mid \lambda) = \sum_{S} \pi_{s_1} \, b_{s_1}(o_1) \prod_{t=2}^{T} a_{s_{t-1}, s_t} \, b_{s_t}(o_t)
    $$  
+=======
+   $P(O \mid \lambda) = \sum_{S} \pi_{s_1} \, b_{s_1}(o_1) \prod_{t=2}^{T} a_{s_{t-1}, s_t} \, b_{s_t}(o_t)$
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
    (solved efficiently by the *forward algorithm*).
 
@@ -194,9 +224,13 @@ $\lambda = (S, O, A, B, \pi)$
 
 2. **Decoding**: find the most likely hidden state sequence  
 
+<<<<<<< HEAD
    $$
    \hat{S} = \arg\max_{S} P(S \mid O, \lambda)
    $$  
+=======
+   $\hat{S} = \arg\max_{S} P(S \mid O, \lambda)$  
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
    (solved by the *Viterbi algorithm*).
 
@@ -215,6 +249,7 @@ $\lambda = (S, O, A, B, \pi)$
 We map HMM components to the road/GPS problem:
 
 - **States (hidden)**: road segments  
+<<<<<<< HEAD
   $$
   S = \{ r_1, r_2, \dots, r_{N_r} \}
   $$
@@ -234,14 +269,31 @@ We map HMM components to the road/GPS problem:
   $$
   P(r_j \mid r_i) \propto \exp\!\left(-\frac{\big| d_{\text{route}}(x_{t,i}, x_{t+1,j}) - d_{\text{gc}}(z_t, z_{t+1}) \big|}{\beta}\right)
   $$
+=======
+  $S = \{ r_1, r_2, \dots, r_{N_r} \$
+
+- **Observations**: GPS points  
+  $O = (z_1, z_2, \dots, z_T), \quad z_t \in \mathbb{R}^2$
+
+- **Emission probabilities**: likelihood of GPS point given road  
+  $ P(z_t \mid r_i) = \frac{1}{2\pi\sigma_z^2} \exp\!\left(-\frac{\| z_t - x_{t,i} \|^2}{2\sigma_z^2}\right)$
+  where $x_{t,i}$ is the closest point on road $r_i$ to GPS point $z_t$.
+
+- **Transition probabilities**: likelihood of moving between road segments  
+  $ P(r_j \mid r_i) \propto \exp\!\left(-\frac{\big| d_{\text{route}}(x_{t,i}, x_{t+1,j}) - d_{\text{gc}}(z_t, z_{t+1}) \big|}{\beta}\right)$
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
   - $d_{\text{route}}(\cdot)$ = shortest-path distance along road network (topology).  
   - $d_{\text{gc}}(\cdot)$ = great-circle distance between GPS points.  
   - If roads $r_i$ and $r_j$ are not connected → $P(r_j \mid r_i) = 0$.
 
 - **Initial distribution**:  
+<<<<<<< HEAD
   $$
   \pi_i = P(r_i \mid z_1) \propto P(z_1 \mid r_i)
   $$
+=======
+  $\pi_i = P(r_i \mid z_1) \propto P(z_1 \mid r_i)$
+>>>>>>> 4edf85c1ae49c2216140536305f1be2ec9b13228
 
 ---
 
